@@ -108,9 +108,51 @@ class HuffmanNode:
         return f"HuffmanNode({self.char, self.freq, self.code})"
 
 
-def huffman_encoding(data=None):
+def path_from_root_to_node(root, char):
+    
+    """
+    :param: root - root of binary tree
+    :param: data - value (representing a node)
+    """        
+    def path_from_node_to_root(root, char):
+
+        if root is None:
+            return None
+        elif root.char == char:
+            return root.get_code()
+        
+        left_answer = path_from_node_to_root(root.left, char)
+        left_code = root.get_code()
+        if  left_answer is not None:
+            if left_code is None:
+                return left_answer
+            else:
+                left_answer+=left_code
+                return left_answer
+        
+        right_answer = path_from_node_to_root(root.right, char)
+        right_code = root.get_code()
+        if  right_answer is not None:
+            if right_code is None:
+                return right_answer
+            else:
+                right_answer+=right_code
+                return right_answer
+            
+        return None
+
+    output_code = path_from_node_to_root(root,char)
+    return output_code[::-1]
+    
+def huffman_encoding(data):
+    
+    freq_table = {}
+    for char in data:
+        freq_table[char] = freq_table.get(char, 0) + 1        
+    print(freq_table)
+    
     min_heap = []
-    for key, value in codes.items():
+    for key, value in freq_table.items():
         node  = HuffmanNode(key, value)
         heapq.heappush(min_heap, node)
     print(min_heap)
@@ -129,19 +171,23 @@ def huffman_encoding(data=None):
     huffman_tree = HuffmanTree()
     huffman_tree.set_root(min_heap[0])
     print(huffman_tree)
-    return 
+    root = huffman_tree.get_root()
+    
+    for key in freq_table:
+        freq_table[key] = path_from_root_to_node(root, key)
+    encoded_data = ''
+    for char in data:
+        encoded_data+=freq_table[char]
+        
+    return encoded_data, huffman_tree
 
 def huffman_decoding(data,tree):
     pass
 
 if __name__ == "__main__":
-    codes = {'A': 7,
-             'B': 3,
-             'C': 7,
-             'D': 2,
-             'E': 6
-             }
-    huffman_encoding()
+  
+    encode_string = huffman_encoding('AAAAAAABBBCCCCCCCDDEEEEEE')[0]
+    print(encode_string)
 
 '''
     a_great_sentence = "The bird is the word"
