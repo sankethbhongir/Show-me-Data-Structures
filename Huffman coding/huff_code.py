@@ -74,6 +74,13 @@ class HuffmanNode:
         self.right = right
         self.code = code
     
+    
+    def set_char(self, char):
+        self.char = char
+        
+    def get_char(self):
+        return self.char
+    
     def set_code(self, code):
         self.code = code
         
@@ -181,13 +188,33 @@ def huffman_encoding(data):
         
     return encoded_data, huffman_tree
 
-def huffman_decoding(data,tree):
-    pass
+def huffman_decoding(encode_data,huff_tree):
+    
+    root = huff_tree.get_root()
+    decoded_string = ''
+    node = root
+    for bit in encode_data:
+        
+        if bit == '0':
+            node = node.get_left_child()
+        else:
+             node = node.get_right_child()
+        
+        decoded_char = node.get_char()
+        if decoded_char is not None:
+            decoded_string+= decoded_char
+            node = root
+            
+    return decoded_string
+        
 
 if __name__ == "__main__":
   
-    encode_string = huffman_encoding('AAAAAAABBBCCCCCCCDDEEEEEE')[0]
-    print(encode_string)
+    encoded_string, tree = huffman_encoding('AAAAAAABBBCCCCCCCDDEEEEEE')
+    print(encoded_string)
+    
+    decoded_string = huffman_decoding(encoded_string, tree)
+    print(decoded_string)
 
 '''
     a_great_sentence = "The bird is the word"
@@ -203,5 +230,5 @@ if __name__ == "__main__":
     decoded_data = huffman_decoding(encoded_data, tree)
 
     print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
-    print ("The content of the encoded data is: {}\n".format(decoded_data))
+    print ("The content of the dencoded data is: {}\n".format(decoded_data))
 '''
