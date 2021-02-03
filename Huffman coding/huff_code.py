@@ -54,7 +54,7 @@ class HuffmanTree():
                 q.enq( (node.get_right_child(), level +1 ))
             else:
                 q.enq( (None, level +1) )
-
+                
         s = "Tree\n"
         previous_level = -1
         for i in range(len(visit_order)):
@@ -175,46 +175,55 @@ def huffman_encoding(data):
     
     returns: bit-string (i.e encoded data) and Huffman tree
     """
+    # edge case if data is empty string
+    if not data:
+        return '', None
     
     # creating freqency table for characters in the data
     freq_table = {}
     for char in data:
         freq_table[char] = freq_table.get(char, 0) + 1        
-    print(freq_table)
+    #print(freq_table)
     
     # creating min-heap with HuffmanNodes
     min_heap = []
     for char, freq in freq_table.items():
         node  = HuffmanNode(char, freq)
         heapq.heappush(min_heap, node)
-    print(min_heap)
+    #print(min_heap)
     
-    # Building Huffman Tree
-    while len(min_heap)>1:
-        
-        # poping out two min nodes from the min_heap
-        min_node1 = heapq.heappop(min_heap)
-        min_node2 = heapq.heappop(min_heap)
-        
-        # creating internal node with a frequency equal to the sum of the two min nodes
-        internal_node = HuffmanNode()
-        internal_node.freq = min_node1.freq + min_node2.freq
-        
-        # assigning 1st min-node as left child to internal node, and bit-0 to left chuld
-        min_node1.set_bit('0')
-        internal_node.set_left_child(min_node1)
-        
-        # assigning 2nd min-node as right child to internal node, and bit-1 to right child
-        min_node2.set_bit('1')
-        internal_node.set_right_child(min_node2)
-        
-        # Pushing internal node back to the heap
-        heapq.heappush(min_heap, internal_node)
+    # edge case if data is having single character
+    if len(min_heap) == 1:
+        root_node = heapq.heappop(min_heap)
+        root_node.set_bit('0')
+        heapq.heappush(min_heap, root_node)
+    else:    
+        # Building Huffman Tree
+        while len(min_heap)>1:
+            
+            # poping out two min nodes from the min_heap
+            min_node1 = heapq.heappop(min_heap)
+            min_node2 = heapq.heappop(min_heap)
+            
+            # creating internal node with a frequency equal to the sum of the two min nodes
+            internal_node = HuffmanNode()
+            internal_node.freq = min_node1.freq + min_node2.freq
+            
+            # assigning 1st min-node as left child to internal node, and bit-0 to left chuld
+            min_node1.set_bit('0')
+            internal_node.set_left_child(min_node1)
+            
+            # assigning 2nd min-node as right child to internal node, and bit-1 to right child
+            min_node2.set_bit('1')
+            internal_node.set_right_child(min_node2)
+            
+            # Pushing internal node back to the heap
+            heapq.heappush(min_heap, internal_node)
         
     # initializng Huffman Tree
     huffman_tree = HuffmanTree()
     huffman_tree.set_root(min_heap[0])
-    print(huffman_tree)
+    #print(huffman_tree)
     root = huffman_tree.get_root()
     
     # updating freqency table by generating unique code for each character in our data
@@ -235,19 +244,28 @@ def huffman_decoding(encode_data,huff_tree):
     returns: decoded data (i.e actual data, our data)
     """
     
+    # edge case, if the data is empty
+    if (not encode_data) and  huff_tree is None:
+        return None
+    
     # root node of the Huffman tree
     root = huff_tree.get_root()
+    
+    # edge case; if data is having single character
+    if (not root.has_left_child()) and (not root.has_right_child()):
+        return root.get_char() * len(encode_data)
     
     # decoding using Huffman tree
     decoded_string = ''
     node = root
+    
     for bit in encode_data:
         # If the current bit of encoded data is 0, move to the left child,
         # else move to the right child of the tree if the current bit is 1
         if bit == '0':
             node = node.get_left_child()
         else:
-             node = node.get_right_child()
+             node = node.get_right_child()  
              
          # if a leaf node is encountered, append the (alphabetical) character of the leaf node to the decoded string
          # and moving back to root
@@ -261,13 +279,7 @@ def huffman_decoding(encode_data,huff_tree):
 
 if __name__ == "__main__":
   
-    encoded_string, tree = huffman_encoding('AAAAAAABBBCCCCCCCDDEEEEEE')
-    print(encoded_string)
-    
-    decoded_string = huffman_decoding(encoded_string, tree)
-    print(decoded_string)
-
-'''
+    print('------------------ Test Case 1 --------------------------')
     a_great_sentence = "The bird is the word"
 
     print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
@@ -276,10 +288,44 @@ if __name__ == "__main__":
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
     print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    # 36
     print ("The content of the encoded data is: {}\n".format(encoded_data))
 
     decoded_data = huffman_decoding(encoded_data, tree)
 
     print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
     print ("The content of the dencoded data is: {}\n".format(decoded_data))
-'''
+    # The bird is the word
+    
+    print('\n------------------ Test Case 2 --------------------------')
+    a_great_sentence = "AAAAAAAAAA"
+
+    print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
+    print ("The content of the data is: {}\n".format(a_great_sentence))
+
+    encoded_data, tree = huffman_encoding(a_great_sentence)
+
+    print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    # 24
+    print ("The content of the encoded data is: {}\n".format(encoded_data))
+
+    decoded_data = huffman_decoding(encoded_data, tree)
+
+    print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    print ("The content of the dencoded data is: {}\n".format(decoded_data))
+    # BBBBBBBB
+    
+    print('\n------------------ Test Case 3 --------------------------')
+    a_great_sentence = ""
+
+    print ("The content of the data is: {}\n".format(a_great_sentence))
+
+    encoded_data, tree = huffman_encoding(a_great_sentence)
+    print ("The content of the encoded data is: {}\n".format(encoded_data))
+    # empty string
+    
+    decoded_data = huffman_decoding(encoded_data, tree)
+    print ("The content of the dencoded data is: {}\n".format(decoded_data))
+    # None
+    
+    
