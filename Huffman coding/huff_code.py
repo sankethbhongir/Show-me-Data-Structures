@@ -288,7 +288,7 @@ if __name__ == "__main__":
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
     print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    # 36
+    # size should get reduced
     print ("The content of the encoded data is: {}\n".format(encoded_data))
 
     decoded_data = huffman_decoding(encoded_data, tree)
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
     print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    # 24
+    # size should get reduced
     print ("The content of the encoded data is: {}\n".format(encoded_data))
 
     decoded_data = huffman_decoding(encoded_data, tree)
