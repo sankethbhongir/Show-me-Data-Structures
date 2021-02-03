@@ -2,6 +2,7 @@ import sys
 import heapq
 from collections import deque
 
+'''Queue used to print tree nodes'''
 class Queue():
     
     def __init__(self):
@@ -19,6 +20,7 @@ class Queue():
     def __len__(self):
         return len(self.q)
 
+''' HuffmanTree, which has huffman nodes'''
 class HuffmanTree():
     
     def __init__(self):
@@ -66,7 +68,8 @@ class HuffmanTree():
                 previous_level = level
                 
         return s
-        
+ 
+''' huffman node used to create huffman tree'''       
 class HuffmanNode:
     
     def __init__(self,char=None,freq=None, left=None, right= None, bit=None):
