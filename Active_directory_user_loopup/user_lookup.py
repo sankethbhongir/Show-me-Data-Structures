@@ -19,6 +19,16 @@ class Group(object):
     def get_name(self):
         return self.name
     
+    def __repr__(self):
+     s = f"parent group: {self.get_name()} \n users: {self.get_users()}"
+     groups = [g for g in self.get_groups()]
+     s+= f"\n groups: {groups}"
+     return s
+     
+     def __str__(self):
+         return self.get_name()
+         
+ 
 parent = Group("parent")
 child = Group("child")
 sub_child = Group("subchild")
@@ -45,4 +55,18 @@ def is_user_in_group(user, group):
       group(class:Group): group to check user membership against
       
     """
-    return None
+    users = group.get_users()
+    groups = group.get_groups()
+    
+    if user in users:
+        return True
+    
+    for group in groups:
+        user_lookup = is_user_in_group(user, group)
+        if user_lookup:
+            return True
+        
+    return False
+
+#print(parent)
+print(is_user_in_group('sub_child_user1', parent))
