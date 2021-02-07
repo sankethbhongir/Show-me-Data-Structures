@@ -20,7 +20,7 @@ class Group(object):
         return self.name
     
     def __repr__(self):
-     s = f"parent group: {self.get_name()} \n users: {self.get_users()}"
+     s = f"group: {self.get_name()} \n users: {self.get_users()}"
      groups = [g for g in self.get_groups()]
      s+= f"\n groups: {groups}"
      return s
@@ -60,7 +60,10 @@ def is_user_in_group(user, group):
     
     if user in users:
         return True
+    elif not user:
+        return False
     
+    # recursive lookup for user in groups
     for group in groups:
         user_lookup = is_user_in_group(user, group)
         if user_lookup:
@@ -68,5 +71,14 @@ def is_user_in_group(user, group):
         
     return False
 
-#print(parent)
+'''Test Case 1'''
+print(is_user_in_group('sub_child_user', parent))
+# True
+
+'''Test Case 2'''
 print(is_user_in_group('sub_child_user1', parent))
+# True
+
+'''Test Case 3'''
+print(is_user_in_group('', parent))
+# False
