@@ -58,5 +58,40 @@ class Blockchain:
             
         return s
         
-        
-    
+   
+''' Test Case 1 '''     
+block_chain = Blockchain()
+block_chain.append('abc')
+block_chain.append('xyz')
+block_chain.append('123')
+print(block_chain)  
+# prints blocks connected to each other 
+
+''' Test Case 2 '''     
+block_chain = Blockchain()
+block_chain.append('abc')
+block_chain.append('123')
+block_chain.append('abc')
+print(block_chain)  
+# prints blocks connected to each other where same data has unique hash
+
+''' Test Case 3 '''     
+block_chain = Blockchain()
+block_chain.append('abc')
+block_chain.append('abcd')
+block_chain.append('abcde')
+block_chain.append('123')
+block_chain.append('1234')
+block_chain.append('12345')
+block_chain.append('xyz')
+block_chain.append('987')
+block_chain.append('this')
+block_chain.append('is')
+block_chain.append('block')
+block_chain.append('chian')
+block_chain.append('using')
+block_chain.append('linked')
+block_chain.append('list')
+print(block_chain)  
+# prints large block chain
+
