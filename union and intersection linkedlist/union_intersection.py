@@ -10,6 +10,8 @@ class Node:
 class LinkedList:
     def __init__(self):
         self.head = None
+        self.tail = None
+        self.size = 0
 
     def __str__(self):
         cur_head = self.head
@@ -24,22 +26,17 @@ class LinkedList:
 
         if self.head is None:
             self.head = Node(value)
+            self.tail = self.head
+            self.size += 1
             return
+        
+        self.tail.next = Node(value)
+        self.tail = self.tail.next
+        self.size += 1
+        return
 
-        node = self.head
-        while node.next:
-            node = node.next
-
-        node.next = Node(value)
-
-    def size(self):
-        size = 0
-        node = self.head
-        while node:
-            size += 1
-            node = node.next
-
-        return size
+    def get_size(self):
+        return self.size
 
 def union(llist_1, llist_2):
     # Your Solution Here
